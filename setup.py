@@ -1,16 +1,16 @@
 from setuptools import setup
 
-from search import __version__
+from retriever_search import __version__
 
 setup(
-    name='search',
+    name='retriever_search',
     version=__version__,
 
     url='https://github.com/GovML/retriever.git',
     author='Sidharth Kathpal',
     author_email='kathpal.sid@gmail.com',
     
-    py_modules=['search'],
+    py_modules=['retriever_search'],
     install_requires=[
         'haystack-ai==2.0.0',
         'pymupdf==1.22.5',

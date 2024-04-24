@@ -14,8 +14,8 @@ $ pip install -e .
 ## Search server and frontend run
 
 ```bash
->>> from search import search_server
->>> from search import frontend_app as fp
+>>> from retriever_search import search_server
+>>> from retriever_search import frontend_app as fp
 >>> fp.run_frontend()
 >>> search_server.run_search_server('path_to_folder', 'save_json_path')
 ```

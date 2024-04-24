@@ -3,7 +3,7 @@ import os
 import pandas as pd
 from flask import Flask, jsonify, request
 import torch
-from search.search_app import search_app
+from retriever_search.search_app import search_app
 
 
 app = Flask(__name__)

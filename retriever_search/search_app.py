@@ -1,7 +1,7 @@
 import sys
 import os
-from search.DocumentIngestion import DocumentIngestion
-from search.QueryPipeline import QueryPipeline
+from retriever_search.DocumentIngestion import DocumentIngestion
+from retriever_search.QueryPipeline import QueryPipeline
 from haystack_integrations.document_stores.qdrant import QdrantDocumentStore
 
 
