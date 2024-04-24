@@ -18,5 +18,9 @@ setup(
         'umap==0.1.1',
         'umap-learn==0.5.5',
         'qdrant-haystack==3.0.0',
+        'Flask==3.0.2',
+        'pandas==2.2.1',
+        'torch==2.2.1',
+        'accelerate==0.27.2'
     ],
 )
