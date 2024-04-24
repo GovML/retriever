@@ -21,6 +21,7 @@ setup(
         'Flask==3.0.2',
         'pandas==2.2.1',
         'torch==2.2.1',
-        'accelerate==0.27.2'
+        'accelerate==0.27.2',
+        'gradio==4.21.0'
     ],
 )
