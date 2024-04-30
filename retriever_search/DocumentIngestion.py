@@ -75,7 +75,7 @@ class DocumentIngestion:
                 self.documents.append(Document(id = file_name, 
                                             content= content[0:4000],
                                             embedding = None,
-                                            meta = {'embedding_2d': None}
+                                            meta = {'embedding_2d': None, 'title': None}
                                             ))
         except:
             file_name = os.path.basename(pdf_path)

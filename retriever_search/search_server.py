@@ -75,6 +75,7 @@ def new_search_code(main_pipe, input_query):
     for i in range(min(len(documents), len(documents))):
         doc = documents[i]
         doc_id = doc.id
+        #print(doc.meta['title'])
         if doc.meta['title'] is not None:
             title = doc.meta['title']
             arxiv_link = f'https://arxiv.org/abs/{doc_id}'
