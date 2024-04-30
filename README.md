@@ -41,3 +41,8 @@ $ pip install retriever-search
 >>> fp.run_frontend()
 >>> search_server.run_search_server('path_to_folder', 'save_json_path')
 ```
+
+## Where to access the frontend 
+
+Access via the following URL - http://127.0.0.1:7860 
+This URL would work for your local setup only
