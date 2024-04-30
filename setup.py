@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 from retriever_search import __version__
 
@@ -24,4 +24,5 @@ setup(
         'accelerate==0.27.2',
         'gradio==4.21.0'
     ],
+    packages=find_packages(),
 )
