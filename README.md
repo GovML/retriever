@@ -8,7 +8,14 @@ Recommended to use a virtual environment using venv -
 ```bash
 $ python -m venv new_env
 $ source new_env/bin/activate
+```
+For installing from the github repo - 
+```bash
 $ pip install -e .
+```
+For installing from the pip - 
+```bash
+$ pip install retriever-search
 ```
 
 ## Search server and frontend run

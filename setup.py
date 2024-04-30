@@ -9,7 +9,9 @@ setup(
     url='https://github.com/GovML/retriever.git',
     author='Sidharth Kathpal',
     author_email='kathpal.sid@gmail.com',
-    
+    description='Local retriever search for your use',
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     py_modules=['retriever_search'],
     install_requires=[
         'haystack-ai==2.0.0',
