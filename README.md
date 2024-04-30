@@ -1,6 +1,17 @@
+<div align="center">
 # Retriever
+<p>
+<img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/GovML/retriever" />
+<img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/GovML/retriever" />
+<img alt="GitHub Repo Size" src="https://img.shields.io/github/repo-size/GovML/retriever" />
+<img alt="GitHub Issues" src="https://img.shields.io/github/issues/GovML/retriever" />
+<img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/GovML/retriever" />
+<img alt="Github License" src="https://img.shields.io/badge/License-Apache-yellow.svg" />
+</p>
 
+</div>
 
+-----
 ## Install 
 
 Recommended to use a virtual environment using venv - 
