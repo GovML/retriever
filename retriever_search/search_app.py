@@ -6,19 +6,20 @@ from haystack_integrations.document_stores.qdrant import QdrantDocumentStore
 
 
 class search_app:
-    def __init__(self, inputDirectory, json_save_path, embedding_2d = "red_emb_1K.npy"):
+    def __init__(self, inputDirectory, json_save_path, embedding_2d = "red_emb_1K.npy", device = 'cpu'):
         self.embedding_2d = embedding_2d
         self.json_path = json_save_path
         self.inputDirectory = inputDirectory
+        self.device = device
 
     def new_search_run(self):
         #model = 'sentence-transformers/all-mpnet-base-v2'
         model = 'sentence-transformers/allenai-specter'
         #model = 'Dagar/t5-small-science-papers'
         if os.path.exists(self.json_path):
-            ingestion = DocumentIngestion(self.json_path, model = None)
+            ingestion = DocumentIngestion(self.json_path, model = None, device=self.device)
         else:
-            ingestion = DocumentIngestion(self.inputDirectory, model = model)
+            ingestion = DocumentIngestion(self.inputDirectory, model = model, device=self.device)
             ingestion.to_json(self.json_path)
 
         document_store = document_store = QdrantDocumentStore(

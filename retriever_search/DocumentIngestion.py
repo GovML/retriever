@@ -11,11 +11,12 @@ import numpy as np
 import umap.umap_ as umap
 
 class DocumentIngestion:
-    def __init__(self, path, model = None, max_docs = float("inf")):
+    def __init__(self, path, model = None, device = 'cpu', max_docs = float("inf")):
         self.path = path
         self.documents = []
         self.max_docs = max_docs
-        print(path)
+        self.device = device
+        print(path, device)
         if path.endswith('.pdf'):
             # Handle single PDF file
             if model == None:
@@ -121,7 +122,7 @@ class DocumentIngestion:
                 self.ingest_pdf(pdf_path)
 
     def create_embeddings(self, model):
-        model = SentenceTransformer(model, device = 'mps')
+        model = SentenceTransformer(model, device = self.device)
    
         content = []
         for doc in tqdm(self.documents):

@@ -93,8 +93,9 @@ def new_search_code(main_pipe, input_query):
     return df, doc_ids, embedding_2d, qa_answer
 
 
-def run_search_server(inputDirectory, json_save_path):
+def run_search_server(inputDirectory, json_save_path, device):
     global main_pipe
-    search_obj = search_app(inputDirectory, json_save_path)
+    print(device)
+    search_obj = search_app(inputDirectory, json_save_path, device = device)
     main_pipe = search_obj.new_search_run()
     app.run(debug=False, host='127.0.0.1', threaded=True)
