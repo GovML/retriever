@@ -2,6 +2,8 @@
 
 # Retriever
 
+### To setup your own local search you can now use this repo.
+
 <p>
 <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/GovML/retriever" />
 <img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/GovML/retriever" />
