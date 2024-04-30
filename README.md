@@ -39,7 +39,7 @@ $ pip install retriever-search
 >>> from retriever_search import search_server
 >>> from retriever_search import frontend_app as fp
 >>> fp.run_frontend()
->>> search_server.run_search_server('path_to_folder', 'save_json_path')
+>>> search_server.run_search_server('path_to_folder', 'save_json_path', device='cpu')
 ```
 
 ## Where to access the frontend 
