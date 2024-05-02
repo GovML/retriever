@@ -86,5 +86,5 @@ class gradio_app:
         demo.launch(share=True) 
 
 def run_frontend():
-    gradio_obj = gradio_app("http://127.0.0.1:5000", "https://divine-mildly-emu.ngrok-free.app/")
+    gradio_obj = gradio_app("http://127.0.0.1:5000", "http://127.0.0.1:8055")
     gradio_obj.gradio_launch()
