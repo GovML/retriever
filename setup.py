@@ -25,7 +25,7 @@ setup(
         'torch==2.2.1',
         'accelerate==0.27.2',
         'gradio==4.21.0',
-        'dash==2.13.0',
+        'dash==2.15.0',
         'plotly==5.10.0',
         'wordcloud==1.9.2',
         'pyLDAvis==3.4.1',
