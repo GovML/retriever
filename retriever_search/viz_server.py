@@ -19,7 +19,6 @@ app = dash.Dash(__name__, server=server)
 
 def get_init_df():
       return pd.DataFrame(columns = ["title", "title_abs", "doc_ids", "keyword", "emb1", "emb2"])
-      #return pd.read_csv('./data/PaperData.csv')
 
 def init_topicModel():
    with open('./data/TopicModellingInit.html', 'r') as f:

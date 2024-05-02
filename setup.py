@@ -20,11 +20,16 @@ setup(
         'umap==0.1.1',
         'umap-learn==0.5.5',
         'qdrant-haystack==3.0.0',
-        'Flask==3.0.2',
+        'Flask==2.2.5',
         'pandas==2.2.1',
         'torch==2.2.1',
         'accelerate==0.27.2',
-        'gradio==4.21.0'
+        'gradio==4.21.0',
+        'dash==2.13.0',
+        'plotly==5.10.0',
+        'wordcloud==1.9.2',
+        'pyLDAvis==3.4.1',
+        'nltk==3.7',
     ],
     packages=find_packages(),
 )
