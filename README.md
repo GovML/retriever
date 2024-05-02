@@ -42,6 +42,16 @@ $ pip install retriever-search
 >>> search_server.run_search_server('path_to_folder', 'save_json_path', device='cpu')
 ```
 
+## Vizualisation run
+
+Currently run from the git repo
+
+```bash
+$ cd retriever
+>>> from retriever_search import viz_server as vs
+>>> vs.run_viz_server()
+```
+
 ## Where to access the frontend 
 
 Access via the following URL - http://127.0.0.1:7860 
