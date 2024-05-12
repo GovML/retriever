@@ -6,8 +6,8 @@ import numpy as np
 from tqdm import tqdm
 #Test
 import requests
-from callbacks import get_callbacks
-from layout import Layout
+from retriever_search.callbacks import get_callbacks
+from retriever_search.layout import Layout
 import json
 import warnings
 import ast  
