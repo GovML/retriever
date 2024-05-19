@@ -4,6 +4,7 @@ from flask import Flask
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+import os
 #Test
 import requests
 from retriever_search.callbacks import get_callbacks
@@ -21,8 +22,10 @@ def get_init_df():
       return pd.DataFrame(columns = ["title", "title_abs", "doc_ids", "keyword", "emb1", "emb2"])
 
 def init_topicModel():
-   with open('./data/TopicModellingInit.html', 'r') as f:
+   this_dir, this_filename = os.path.split(__file__)
+   with open(this_dir + '/TopicModellingInit.html', 'r') as f:
       vis_html = f.read()
+   #vis_html = importlib.resources.read_binary("retriever_search", "TopicModellingInit.html")
    return vis_html
 
 vis_html = init_topicModel()

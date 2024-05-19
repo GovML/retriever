@@ -32,4 +32,6 @@ setup(
         'nltk==3.7',
     ],
     packages=find_packages(),
+    include_package_data=True,
+    package_data={'retriever_search': ['data/CountVectorizer.pkl', 'data/EmbeddedVectors.pkl', 'data/LDAModel.pkl', 'TopicModellingInit.html']}
 )

@@ -14,6 +14,7 @@ import matplotlib
 import pandas as pd
 import requests
 from tqdm import tqdm
+import os
 
 
 class get_callbacks():
@@ -32,18 +33,24 @@ class get_callbacks():
 
     
     def init_data(self):
-    
+        
+        this_dir, this_filename = os.path.split(__file__)
+        print(this_dir)
         #Loading the lda_model for topic_modeling
-        with open("./data/LDAModel.pkl", "rb") as f:
+        with open(this_dir + "/data/LDAModel.pkl", "rb") as f:
             ldaModel = pickle.load(f)
 
         #Loading the Count vectorizer array
-        with open("./data/EmbeddedVectors.pkl", "rb") as f:
+        with open(this_dir + "/data/EmbeddedVectors.pkl", "rb") as f:
             dtm_tf = pickle.load(f)
 
         #Loading the Count Vectorizer object
-        with open("./data/CountVectorizer.pkl", "rb") as f:
+        with open(this_dir + "/data/CountVectorizer.pkl", "rb") as f:
             tf_vectorizer = pickle.load(f)
+
+        #ldaModel = pickle.load(importlib.resources.read_text("retriever_search", "LDAModel.pkl"))
+        #dtm_tf = pickle.load(importlib.resources.read_text("retriever_search", "mbeddedVectors.pkl"))
+        #tf_vectorizer = pickle.load(importlib.resources.read_text("retriever_search", "CountVectorizer.pkl"))
 
         return ldaModel, dtm_tf, tf_vectorizer
 
