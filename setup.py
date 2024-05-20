@@ -27,9 +27,9 @@ setup(
         'gradio==4.21.0',
         'dash==2.15.0',
         'plotly==5.10.0',
-        'wordcloud==1.9.2',
+        'wordcloud',
         'pyLDAvis==3.4.1',
-        'nltk==3.7',
+        'nltk==3.7'
     ],
     packages=find_packages(),
     include_package_data=True,

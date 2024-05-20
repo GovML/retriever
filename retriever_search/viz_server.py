@@ -12,6 +12,7 @@ from retriever_search.layout import Layout
 import json
 import warnings
 import ast  
+import nltk
 
 warnings.filterwarnings("ignore")
 
@@ -40,6 +41,7 @@ def get_json(path):
 
 
 def run_viz_server():
+    nltk.download('stopwords')
     call_b = get_callbacks(app, df, keyword_data)
     app.layout = Layout(df, vis_html, keyword_data).layout
     app.run_server(debug=False, host = "127.0.0.1",port=8055)

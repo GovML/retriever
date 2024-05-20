@@ -48,7 +48,7 @@ def add_query():
     embedding_2d.append({"query": query, "embedding_2d": emb2d})
     query_list.append({"query": query})
     qa_answers.append({'qa_answer': qa_answer})
-
+    print('qa_answer', qa_answer)
     return jsonify(data_values)
 
 def new_search_code(main_pipe, input_query):

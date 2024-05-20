@@ -35,6 +35,7 @@ class gradio_app:
         data_values = { "query": str(input_query)}
         responses = requests.post(self.search_link + "/search_query", json=data_values)
         qa_answer = requests.get(self.search_link + "/get_qa_answer")
+        print(qa_answer)
         self.qa_answer_value = "### " + qa_answer.json()[0]['qa_answer']
         df = pd.read_json(responses.json(), orient='records')
 
@@ -83,7 +84,7 @@ class gradio_app:
                     out1 = gr.HTML(html)
 
 
-        demo.launch(share=True) 
+        demo.launch(share=False) 
 
 def run_frontend():
     gradio_obj = gradio_app("http://127.0.0.1:5000", "http://127.0.0.1:8055")
