@@ -56,3 +56,10 @@ $ cd retriever
 
 Access via the following URL - http://127.0.0.1:7860 
 This URL would work for your local setup only
+
+
+## Tickets
+
+1.0.0
+- [ ] Add lightweight embedding model support as flag in launcher
+
