@@ -18,6 +18,7 @@ class gradio_app:
         self.search_link = search_link
         self.analysis_link = analysis_link
         self.qa_answer_value = "### You havent asked any questions yet"
+        self.input_query = ''
 
     def load_example(self, example_id):
         global keyword
@@ -45,12 +46,19 @@ class gradio_app:
 
         #file = open('./plotly_dash_viz/main.py', 'r')
         #file.close()
-        return df, keyword, gr.Markdown(self.qa_answer_value)
-
-    def export_data(self, df, query):
         if not os.path.isdir('./output/'):
             os.makedirs('./output/')
-        df.to_csv('./output/' + query + '.csv')
+        df.to_csv('./output/' + input_query.strip('?') + '.csv')
+        filepath = './output/' + input_query.strip('?') + '.csv'
+        name = input_query.strip('?') + '.csv'
+        self.input_query = input_query
+        return df, keyword, gr.Markdown(self.qa_answer_value), gr.DownloadButton(label=f"Download {name}", value=filepath, visible=True)
+
+    def export_data(self, df):
+        query = self.input_query.strip('?')
+        filepath = './output/' + query + '.csv'
+        os.remove(filepath)
+        return gr.DownloadButton(label=f"Download the file", visible=False)
 
 
     def gradio_launch(self):
@@ -71,11 +79,14 @@ class gradio_app:
 
                     gr.Markdown("## Other Relevant Papers")
                     out = gr.DataFrame(pd.DataFrame([], columns = ['Title']), wrap = True)
-                    examples.click(self.load_example, inputs=[examples], outputs=[inp, out, qa_answer_markdown])
-                    btn.click(fn=self.search_query, inputs=inp, outputs=[out, examples, qa_answer_markdown])
                     with gr.Row():
-                        btn1 = gr.Button("Export Results")
-                    btn1.click(fn=self.export_data, inputs=[out, inp], outputs=[])
+                        btn1 = gr.DownloadButton("Download the file", visible=False)
+                        #btn1 = gr.Button("Export Results")
+                    examples.click(self.load_example, inputs=[examples], outputs=[inp, out, qa_answer_markdown])
+                    btn.click(fn=self.search_query, inputs=inp, outputs=[out, examples, qa_answer_markdown, btn1])
+                    btn1.click(fn=self.export_data, inputs=[out], outputs=[btn1])
+                    #btn1.click(fn=self.export_data, inputs=[out, inp], outputs=[])
+                    #os.remove(filepath)
                 with gr.TabItem("ANALYSIS", id = 1):
                     gr.Markdown("# Analyse your searched data")
                     
