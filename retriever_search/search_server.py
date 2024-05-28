@@ -94,9 +94,9 @@ def new_search_code(main_pipe, input_query):
     return df, doc_ids, embedding_2d, qa_answer
 
 
-def run_search_server(inputDirectory, json_save_path, device):
+def run_search_server(inputDirectory, json_save_path, hugging_face_model = 'sentence-transformers/allenai-specter', device = 'cpu'):
     global main_pipe
     print(device)
-    search_obj = search_app(inputDirectory, json_save_path, device = device)
+    search_obj = search_app(inputDirectory, json_save_path, model = hugging_face_model, device = device)
     main_pipe = search_obj.new_search_run()
     app.run(debug=False, host='127.0.0.1', threaded=True)
