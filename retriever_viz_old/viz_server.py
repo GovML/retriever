@@ -7,8 +7,8 @@ from tqdm import tqdm
 import os
 #Test
 import requests
-from retriever_search.callbacks import get_callbacks
-from retriever_search.layout import Layout
+from retriever_viz_old.callbacks import get_callbacks
+from retriever_viz_old.layout import Layout
 import json
 import warnings
 import ast  

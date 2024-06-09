@@ -34,6 +34,12 @@ def get_qa_answer():
 def get_queries():
     return jsonify(query_list)
 
+'''
+@app.route('/post_search', methods=['POST'])
+def set_queries():
+    return jsonify(query_list)
+'''
+
 @app.route('/search_query', methods=['POST'])
 def add_query():
     global qa_answers
