@@ -54,7 +54,7 @@ def add_query():
     embedding_2d.append({"query": query, "embedding_2d": emb2d})
     query_list.append({"query": query})
     qa_answers.append({'qa_answer': qa_answer})
-    print('qa_answer', qa_answer)
+    print('qa_answer in search server', qa_answer)
     return jsonify(data_values)
 
 def new_search_code(main_pipe, input_query):
@@ -62,15 +62,16 @@ def new_search_code(main_pipe, input_query):
     responses = main_pipe.run(query=str(input_query))
     print("HELLO THERE WE REACHED HERE")
     documents = responses['search']['documents']
-    if responses['qa']['answers'][0].data is not None:
-        if responses['qa']['answers'][0].score >= 0.50:
-            answer = responses['qa']['answers'][0].data
-            source = responses['qa']['answers'][0].document.id
-            qa_answer = f'{answer}, According to {source}.'
-        else:
-            qa_answer = "Sorry I could not find information for this. I only have data on your pc. Which may not contain an answer for your question."
-    else:
-        qa_answer = "Sorry I could not find information for this. I only have data on your pc. Which may not contain an answer for your question."
+    qa_answer = responses['qa']
+    # if responses['qa']['answers'][0].data is not None:
+    #     if responses['qa']['answers'][0].score >= 0.50:
+    #         answer = responses['qa']['answers'][0].data
+    #         source = responses['qa']['answers'][0].document.id
+    #         qa_answer = f'{answer}, According to {source}.'
+    #     else:
+    #         qa_answer = "Sorry I could not find information for this. I only have data on your pc. Which may not contain an answer for your question."
+    # else:
+    #     qa_answer = "Sorry I could not find information for this. I only have data on your pc. Which may not contain an answer for your question."
     doc_ids = []
     titles = []
     abstracts = []

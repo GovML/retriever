@@ -36,8 +36,12 @@ class gradio_app:
         data_values = { "query": str(input_query)}
         responses = requests.post(self.search_link + "/search_query", json=data_values)
         qa_answer = requests.get(self.search_link + "/get_qa_answer")
-        print(qa_answer)
-        self.qa_answer_value = "### " + qa_answer.json()[0]['qa_answer']
+        print('in frontend', qa_answer.json()[0]['qa_answer']['qa_answer'])
+        if qa_answer.json()[0]['qa_answer']['qa_answer'] == '  \n' or qa_answer.json()[0]['qa_answer']['score'] < 0.2:
+            self.qa_answer_value = '### Sorry I could not find information for this. I only have data on your pc. Which may not contain an answer for your question.'
+        else:
+            is_unsure = 'Low confidence answer:' if qa_answer.json()[0]['qa_answer']['score'] < 0.7 else ''
+            self.qa_answer_value = "### "+ is_unsure + qa_answer.json()[0]['qa_answer']['qa_answer'] 
         df = pd.read_json(responses.json(), orient='records')
 
         #df, doc_ids = self.search_code_arxiv(responses)
