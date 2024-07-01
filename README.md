@@ -44,10 +44,7 @@ $ pip install retriever-search
 
 ## Vizualisation run
 
-Currently run from the git repo
-
 ```bash
-$ cd retriever
 >>> from retriever_search import viz_server as vs
 >>> vs.run_viz_server()
 ```
