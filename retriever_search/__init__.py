@@ -1,4 +1,4 @@
-__version__ = '0.2.6'
+__version__ = '0.2.9'
 
 
 def hello_world():

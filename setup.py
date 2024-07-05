@@ -29,9 +29,11 @@ setup(
         'plotly==5.10.0',
         'wordcloud',
         'pyLDAvis==3.4.1',
-        'nltk==3.7'
+        'nltk==3.7',
+        'geopy',
+        'pycountry'
     ],
     packages=find_packages(),
     include_package_data=True,
-    package_data={'retriever_search': ['data/CountVectorizer.pkl', 'data/EmbeddedVectors.pkl', 'data/LDAModel.pkl', 'TopicModellingInit.html']}
+    #package_data={'retriever_search': ['data/CountVectorizer.pkl', 'data/EmbeddedVectors.pkl', 'data/LDAModel.pkl', 'TopicModellingInit.html']}
 )
