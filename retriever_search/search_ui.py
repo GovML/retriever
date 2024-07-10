@@ -3,8 +3,9 @@ import requests
 import pandas as pd
 
 class GradioSearchUI:
-    def __init__(self, search_server_url):
+    def __init__(self, search_server_url, analysis_server_url):
         self.search_server_url =  search_server_url
+        self.analysis_server_url = analysis_server_url
         self.query_result_cache = {}
         self.previous_queries = []  # is a list of queries, not buttons
         self.interface = self.build_interface()
@@ -60,6 +61,9 @@ class GradioSearchUI:
             with gr.Tab("Analysis"):
                 # This tab is left blank for now
                 gr.Markdown("Analysis Tab Content")
+                src_val = self.analysis_server_url
+                html = ("<iframe id=\"iframeid\" src=" + src_val + "\ width=1200 height=2000>")
+                out1 = gr.HTML(html)
 
         return interface
 
@@ -68,5 +72,6 @@ class GradioSearchUI:
 
 if __name__ == "__main__":
     search_server_url = 'http://127.0.0.1:5000'
-    gradio_ui = GradioSearchUI(search_server_url)
+    analysis_server_url = 'http://127.0.0.1:8055'
+    gradio_ui = GradioSearchUI(search_server_url, analysis_server_url)
     gradio_ui.launch()

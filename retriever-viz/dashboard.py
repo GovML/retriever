@@ -53,28 +53,11 @@ class Dashboard():
             Output('query-selector', 'value'),
             Input('refresh-button', 'n_clicks')
         )(self.refresh_data)
-        
+
     def update_documents(self):
-        search_results = requests.get("http://127.0.0.1:5000/search_results").json()
-        embeddings_results = requests.get("http://127.0.0.1:5000/search_return_embeddings").json()
+        search_results = requests.get("http://127.0.0.1:5000/get_all_results_cache").json()
+        self.documents = search_results
 
-        for i, result in enumerate(search_results):
-            embeddings = embeddings_results[i]['embedding_2d'] #Life Beyond the Solar System Space Weather and Its Impact on Habitable Worlds.pdf
-            query = result['query']
-
-            if query not in self.documents.keys():
-                self.documents[query] = []
-                data = ast.literal_eval(result['data'])
-                
-                for z, doc in enumerate(data):
-                    embedding = embeddings[z]['embeddings']
-                    self.documents[query].append(
-                        Document(id = doc['Link'], 
-                            content= doc['Content'],
-                            embedding = None,
-                            meta = {'embedding_2d': embedding, 'title': doc['Title']}
-                            )
-                    )
     def refresh_data(self, n_clicks):
         self.update_documents()
         return list(self.documents.keys()), []
@@ -91,8 +74,8 @@ class Dashboard():
         for query, query_documents in self.documents.items():
             if query in selected_queries: #checks if is one of selected queries
                 for doc in query_documents:
-                    embeddings.append(doc.meta['embedding_2d'])
-                    titles.append(doc.meta['title'])
+                    embeddings.append(doc['meta']['embedding_2d'])
+                    titles.append(doc['meta']['title'])
 
         emb_df = pd.DataFrame(embeddings, columns = ['x','y'])
         emb_df['Title'] = titles   
@@ -112,7 +95,7 @@ class Dashboard():
         for query, query_documents in self.documents.items():
             if query in selected_queries: #checks if is one of selected queries
                 for doc in query_documents:
-                    texts.append(doc.content)
+                    texts.append(doc['content'])
 
         stop_words = list(text.ENGLISH_STOP_WORDS.union(['additional', 'stopwords', 'if', 'needed']))
         [stop_words.append(str(i)) for i in range(100)]
@@ -130,7 +113,7 @@ class Dashboard():
         for query, query_documents in self.documents.items():
             if query in selected_queries: #checks if is one of selected queries
                 for doc in query_documents:
-                    texts.append(doc.content)
+                    texts.append(doc['content'])
         
         texts = ' '.join(texts).split()
 
@@ -158,7 +141,7 @@ class Dashboard():
         for query, query_documents in self.documents.items():
             if query in selected_queries:  # checks if is one of selected queries
                 for doc in query_documents:
-                    texts.append(doc.content)
+                    texts.append(doc['content'])
 
         location_counts = Counter()
         for text in texts:

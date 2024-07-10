@@ -32,12 +32,13 @@ class SearchServer:
         stored queries
         '''
         self.query_result_cache = {}
+        self.search_result_cache = {}
 
         if verbose:
             print('Initializing Document Ingestion...')
 
         if json_save_path == None or os.path.exists(json_save_path): 
-            ingestion = DocumentIngestion(self.input_directory, model = None, device=self.device)
+            ingestion = DocumentIngestion(json_save_path, model = None, device=self.device)
         else:
             ingestion = DocumentIngestion(self.input_directory, model = self.embedding_model, device=self.device)
             ingestion.to_json(json_save_path)
@@ -74,13 +75,18 @@ class SearchServer:
             if query not in self.query_result_cache.keys():
                 responses = self.query_engine.run(query=str(query))
                 self.query_result_cache[query] = responses
+                self.search_result_cache[query] = responses['search']['documents']
             else:
                 responses = self.query_result_cache[query]
             return jsonify(responses)
         
         @self.app.route('/get_previous_queries', methods=['GET'])
         def get_previous_queries():
-            return jsonify(list(self.query_result_cache.keys()))   
+            return jsonify(list(self.query_result_cache.keys()))  
+        
+        @self.app.route('/get_all_results_cache', methods=['GET'])
+        def get_all_results_cache():
+            return jsonify(self.search_result_cache)
 
 if __name__ == '__main__':
-    server = SearchServer(input_directory='C:/Users/Rudy/Desktop/UN-run/tmp_json_astro.json')
+    server = SearchServer(input_directory='/Users/sidharthkathpal/Documents/PDF_TOTAL/nd_pdfs',json_save_path = '../testing_new_server.json',device = 'mps')
