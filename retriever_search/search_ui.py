@@ -68,5 +68,6 @@ class GradioSearchUI:
 
 if __name__ == "__main__":
     search_server_url = 'http://127.0.0.1:5000'
-    gradio_ui = GradioSearchUI(search_server_url)
+    analysis_server_url = 'http://127.0.0.1:8055'
+    gradio_ui = GradioSearchUI(search_server_url, analysis_server_url)
     gradio_ui.launch()
