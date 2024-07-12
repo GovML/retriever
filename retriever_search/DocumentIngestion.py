@@ -6,38 +6,30 @@ import fitz
 from haystack import Document
 from haystack.components.embedders import SentenceTransformersDocumentEmbedder
 from sentence_transformers import SentenceTransformer
-from sklearn.manifold import TSNE
 import numpy as np
 import umap.umap_ as umap
 
 class DocumentIngestion:
-    def __init__(self, path, model = None, device = 'cpu', max_docs = float("inf")):
+    def __init__(self, path, model, device = 'cpu', max_docs = float("inf")):
         self.path = path
         self.documents = []
         self.max_docs = max_docs
         self.device = device
         print(path, device)
+
         if path.endswith('.pdf'):
             # Handle single PDF file
-            if model == None:
-                assert False, 'Specify a model to embed the document.'
             self.ingest_pdf(path)
-            
         elif path.endswith('.json'):
             # Handle JSON file
             self.load_json(path)
         elif os.path.isdir(path):
-
-            print(path)
-            # Handle directory
-            if model == None:
-                assert False, 'Specify a model to embed the documents.'
             self.ingest_pdf_folder(path)
+        else:
+            assert False, 'Unsupported file type(s) for ingestion. Please provide a folder or json.'
 
         #compute embeddings if not present
-        if model == None and self.documents[0].embedding is None:
-            assert False, 'Please specify a model to construct embeddings. No Embeddings Found'
-        elif self.documents[0].embedding is None:
+        if self.documents[0].embedding is None:
             print('Computing Embeddings...')
             self.create_embeddings(model = model)
         else:
