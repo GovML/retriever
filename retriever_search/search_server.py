@@ -100,5 +100,5 @@ class SearchServer:
         def get_all_results_cache():
             return jsonify(self.search_result_cache)
 
-if __name__ == '__main__':
-    server = SearchServer(input_directory='C:/Users/Rudy/Desktop/UN-run/tmp_json_astro.json') #, json_save_path = '../testing_new_server.json',device = 'mps'
+def run_search_server(input_directory = None, input_json = None, json_save_path = None, embedding_model = 'sentence-transformers/allenai-specter', device = 'cpu', host = '127.0.0.1', verbose = True):
+    server = SearchServer(input_directory,input_json,json_save_path,embedding_model,device,host,verbose) #, json_save_path = '../testing_new_server.json',device = 'mps'

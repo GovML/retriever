@@ -179,6 +179,6 @@ class Dashboard():
             
 
 
-if __name__ == "__main__":
+def run_viz_server():
     dash_app = Dashboard()
     dash_app.run()
