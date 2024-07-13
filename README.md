@@ -33,13 +33,24 @@ For installing from the pip -
 $ pip install retriever-search
 ```
 
-## Search server and frontend run
+## Search server
 
 ```bash
 >>> from retriever_search import search_server
+>>> search_server.run_search_server('input_directory', 'input_json', 'save_json_path', device='cpu')
+```
+
+## Search parameter meanings
+
+- input_directory -- The directory holding your files
+- input_json -- pre saved json file from earlier runs can be used for faster loading
+- save_json_path -- pass for saving the embeddings to a json can be used later as input_json
+
+## Frontend run
+
+```bash
 >>> from retriever_search import frontend_app as fp
 >>> fp.run_frontend()
->>> search_server.run_search_server('path_to_folder', 'save_json_path', device='cpu')
 ```
 
 ## Vizualisation run
