@@ -1,7 +1,6 @@
 import gradio as gr
 import requests
 import pandas as pd
-from dashboard import Dashboard
 
 class GradioSearchUI:
     def __init__(self, search_server_url, analysis_server_url):
@@ -81,6 +80,3 @@ def run_frontend():
     analysis_server_url = 'http://127.0.0.1:8055'
     gradio_ui = GradioSearchUI(search_server_url, analysis_server_url)
     gradio_ui.launch()
-
-    dash_app = Dashboard()
-    dash_app.run()
