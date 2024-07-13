@@ -75,7 +75,7 @@ class GradioSearchUI:
     def launch(self):
         self.interface.launch(share=False)
 
-if __name__ == "__main__":
+def run_frontend():
     search_server_url = 'http://127.0.0.1:5000'
     analysis_server_url = 'http://127.0.0.1:8055'
     gradio_ui = GradioSearchUI(search_server_url, analysis_server_url)
