@@ -56,7 +56,7 @@ $ pip install retriever-search
 ## Vizualisation run
 
 ```bash
->>> from retriever_search import viz_server as vs
+>>> from retriever_search import dashboard as vs
 >>> vs.run_viz_server()
 ```
 
