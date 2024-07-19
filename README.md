@@ -37,7 +37,7 @@ $ pip install retriever-search
 
 ```bash
 >>> from retriever_search import search_server
->>> search_server.run_search_server('input_directory', 'input_json', 'save_json_path', device='cpu')
+>>> search_server.run_search_server('input_directory', 'input_json', 'json_save_path', device='cpu')
 ```
 
 ## Search parameter meanings
