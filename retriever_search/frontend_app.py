@@ -65,9 +65,9 @@ class GradioSearchUI:
                     
             with gr.Tab("ANALYSIS"):
                 # This tab is left blank for now
-                gr.Markdown("# Analysis Tab Content")
+                # gr.Markdown("# Analysis Tab Content")
                 src_val = self.analysis_server_url
-                html = ("<iframe id=\"iframeid\" src=" + src_val + "\ width=1450 height=2000>")
+                html = ("<iframe id=\"iframeid\" src=" + src_val + "\ width=1400 height=2000>")
                 out1 = gr.HTML(html)
 
         return interface

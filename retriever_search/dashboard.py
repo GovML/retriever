@@ -53,7 +53,7 @@ class Dashboard():
             html.H1("Analysis Dashboard", style = {'color': "#1F618D", 'font-family': 'Roboto, sans-serif','margin-left': '0%'}),
             dcc.Dropdown(list(self.documents.keys()), list(self.documents.keys()), id='query-selector', multi=True, style = {
                                                                                                             'display': 'block',
-                                                                                                            'width': '95%',
+                                                                                                            'width': '80%',
                                                                                                             'margin-left': '0%',
                                                                                                             'background-color': '#F6FBFF',
                                                                                                             'border-color': '#DFE6E9',
@@ -63,18 +63,19 @@ class Dashboard():
             html.Button('Refresh Data', id='refresh-button', n_clicks=0, style = self.button_style),
             html.H2("2D Plot of the Related Papers", style = self.header_style),
 
-            html.Div([
-            html.Img(id='wordcloud', disable_n_clicks = True, alt = "WordCloud", style = {'margin-top':'0px','height': '22.5%', 'width':'27%', 'box-shadow': '2px 2px 2px lightgrey', 'position': 'absolute'})], 
-                style={'float': 'right','margin-right': '28%', 'margin-top': '0px', 'height': '40%', 'width': '`16%'}),
+            
 
             
-            dcc.Graph(id='umap', style= {'margin-left' : '0%',"width": "71%",'padding': '0px 0px', 'box-shadow': '2px 2px 2px lightgrey'}),
+            dcc.Graph(id='umap', style= {'margin-left' : '0%',"width": "85%",'padding': '0px 0px', 'box-shadow': '2px 2px 2px lightgrey'}),
             html.Br(),
             html.H2("Word Frequency Map", style = self.header_style),
-            dcc.Graph(id='heatmap', style= {'margin-left' : '0%',"width": "99.5%",'padding': '0px 0px', 'box-shadow': '2px 2px 2px lightgrey'}),
+            dcc.Graph(id='heatmap', style= {'margin-left' : '0%',"width": "85%",'padding': '0px 0px', 'box-shadow': '2px 2px 2px lightgrey'}),
             html.H2("Country Mentions", style = self.header_style),
-            dcc.Graph(id='location-map', style= {'margin-left' : '0%',"width": "50%",'padding': '0px 0px', 'box-shadow': '2px 2px 2px lightgrey'}),
-            
+            dcc.Graph(id='location-map', style= {'margin-left' : '0%',"width": "85%",'padding': '0px 0px', 'box-shadow': '2px 2px 2px lightgrey'}),
+            html.H2("Word Cloud", style = self.header_style),
+            html.Div([
+            html.Img(id='wordcloud', disable_n_clicks = True, alt = "WordCloud", style = {'margin-top':'0px','height': '22.5%', 'width':'50%', 'box-shadow': '2px 2px 2px lightgrey', 'position': 'absolute'})], 
+                style={'margin-left': '15%', 'margin-top': '0px', 'height': '40%', 'width': '`16%'}),
             
         ])
 
