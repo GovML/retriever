@@ -65,8 +65,8 @@ This URL would work for your local setup only
 ## Tickets
 
 1.0.0
-- [ ] Add lightweight embedding model support as flag in launcher
-- [ ] Remove HTML requirement for plotly visualization
-- [ ] Make LDA visualization update
+- [-] Add lightweight embedding model support as flag in launcher
+- [-] Remove HTML requirement for plotly visualization
+- [-] Make LDA visualization update
 - [ ] Add model quantized
 
