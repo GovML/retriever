@@ -46,19 +46,13 @@ $ pip install retriever-search
 - input_json -- pre saved json file from earlier runs can be used for faster loading
 - save_json_path -- pass for saving the embeddings to a json can be used later as input_json
 
-## Frontend run
+## Frontend and Vizualisation run
 
 ```bash
 >>> from retriever_search import frontend_app as fp
 >>> fp.run_frontend()
 ```
 
-## Vizualisation run
-
-```bash
->>> from retriever_search import dashboard as vs
->>> vs.run_viz_server()
-```
 
 ## Where to access the frontend 
 
