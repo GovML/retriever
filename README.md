@@ -37,14 +37,16 @@ $ pip install retriever-search
 
 ```bash
 >>> from retriever_search import search_server
->>> search_server.run_search_server('input_directory', 'input_json', 'json_save_path', device='cpu')
+>>> search_server.run_search_server('input_directory', 'input_json', 'json_save_path', 'embedding_model', 'qa_model', device='cpu')
 ```
 
 ## Search parameter meanings
 
 - input_directory -- The directory holding your files
 - input_json -- pre saved json file from earlier runs can be used for faster loading
-- save_json_path -- pass for saving the embeddings to a json can be used later as input_json
+- json_save_path -- pass for saving the embeddings to a json can be used later as input_json
+- embedding_model -- pick the embedding model you want to we use Spectre model as a default
+- qa_model -- you can currently pick between tiny, medium and large
 
 ## Frontend and Vizualisation run
 
