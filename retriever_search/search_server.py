@@ -74,7 +74,7 @@ class SearchServer:
         if verbose:
             print('Initializing Document Ingestion...')
 
-        self.app.run(debug=True, host='127.0.0.1', threaded=True, port = 5000)
+        self.app.run(debug=False, host='127.0.0.1', port = 5000)
     
 
     def setup_routes(self):

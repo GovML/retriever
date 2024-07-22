@@ -1,6 +1,7 @@
 import gradio as gr
 import requests
 import pandas as pd
+import retriever_search.dashboard as db
 
 class GradioSearchUI:
     def __init__(self, search_server_url, analysis_server_url):
@@ -80,3 +81,4 @@ def run_frontend():
     analysis_server_url = 'http://127.0.0.1:8055'
     gradio_ui = GradioSearchUI(search_server_url, analysis_server_url)
     gradio_ui.launch()
+    db.run_viz_server()

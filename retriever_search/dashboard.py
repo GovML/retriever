@@ -151,7 +151,7 @@ class Dashboard():
 
     #runs the app from main
     def run(self):
-        self.app.run_server(debug=True, host="127.0.0.1", port=8055)
+        self.app.run_server(debug=False, host="127.0.0.1", port=8055)
 
 
     ##### Visualization Code Start
