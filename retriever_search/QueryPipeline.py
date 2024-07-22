@@ -12,20 +12,23 @@ import gc
 from typing import List, Optional
 
 @component
-class BertQA:
+class QA:
   """
   A component generating personal welcome message and making it upper case
   """
+  def __init__(self, model):
+     self.model = model
+
   @component.output_types(qa_answer=str)
   def run(self, query: str, documents: List[Document], top_k: Optional[int] = None):
-    question_answerer = pipeline("question-answering", model="deepset/tinyroberta-squad2")
+    question_answerer = pipeline("question-answering", model=self.model)
     c= ' '.join([d.content for d in documents])
     res = question_answerer(question=query, context=c)
     print(res)
     return {"qa_answer": res['answer'], "score": res['score']}
 
 class QueryPipeline:
-    def __init__(self, document_store, type, ann_model, ranker_model):
+    def __init__(self, document_store, type, ann_model, ranker_model, qa_model):
         self.document_store = document_store
         self.type = type
         self.ann_model = ann_model
@@ -34,7 +37,7 @@ class QueryPipeline:
         self.pipe.add_component("text_embedder", SentenceTransformersTextEmbedder(model=self.ann_model))
         self.pipe.add_component("retriever", QdrantEmbeddingRetriever(document_store=document_store, return_embedding= False))
         self.pipe.add_component("reranker", TransformersSimilarityRanker(ranker_model))
-        self.pipe.add_component("qa", BertQA())
+        self.pipe.add_component("qa", QA(qa_model))
         self.pipe.add_component("search", DocumentJoiner())
 
         self.pipe.connect("text_embedder.embedding", "retriever.query_embedding")

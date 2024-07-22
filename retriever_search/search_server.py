@@ -11,7 +11,7 @@ from retriever_search.QueryPipeline import QueryPipeline
 
 class SearchServer:
 
-    def __init__(self, input_directory = None, input_json = None, json_save_path = None, embedding_model = 'sentence-transformers/allenai-specter', device = 'cpu', host = '127.0.0.1', verbose = True):
+    def __init__(self, input_directory = None, input_json = None, json_save_path = None, embedding_model = 'sentence-transformers/allenai-specter', qa_model = 'tiny', device = 'cpu', host = '127.0.0.1', verbose = True):
         if verbose:
             print('Initializing Application...')
 
@@ -66,10 +66,18 @@ class SearchServer:
         if verbose:
             print('Initializing Search Functions...')
 
+        if qa_model == 'tiny':
+            qa_model = 'mrm8488/bert-tiny-5-finetuned-squadv2'
+        elif qa_model == 'medium':
+            qa_model = 'twmkn9/albert-base-v2-squad2'
+        elif qa_model == 'large':
+            qa_model = 'deepset/roberta-large-squad2'
+
         self.query_engine = QueryPipeline(document_store, 
                             type = 'Search', 
                             ann_model=self.embedding_model, 
-                            ranker_model="cross-encoder/ms-marco-MiniLM-L-12-v2"
+                            ranker_model="cross-encoder/ms-marco-MiniLM-L-12-v2",
+                            qa_model=qa_model
                             )
         if verbose:
             print('Initializing Document Ingestion...')
@@ -100,5 +108,6 @@ class SearchServer:
         def get_all_results_cache():
             return jsonify(self.search_result_cache)
 
-def run_search_server(input_directory = None, input_json = None, json_save_path = None, embedding_model = 'sentence-transformers/allenai-specter', device = 'cpu', host = '127.0.0.1', verbose = True):
-    SearchServer(input_directory,input_json,json_save_path,embedding_model,device,host,verbose) #, json_save_path = '../testing_new_server.json',device = 'mps'
+def run_search_server(input_directory = None, input_json = None, json_save_path = None, embedding_model = 'sentence-transformers/allenai-specter', qa_model = 'tiny', device = 'cpu', host = '127.0.0.1', verbose = True):
+    
+    SearchServer(input_directory,input_json,json_save_path,embedding_model,qa_model,device,host,verbose) #, json_save_path = '../testing_new_server.json',device = 'mps'
