@@ -12,7 +12,7 @@
 <img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/GovML/retriever" />
 <img alt="Github License" src="https://img.shields.io/badge/License-Apache-yellow.svg" />
 </p>
-![demo](https://github.com/GovML/retriever/blob/main/retriever.gif)
+<img src="./retriever.gif"/>
 </div>
 -----
 ## Install 
