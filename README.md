@@ -2,7 +2,7 @@
 
 # Retriever
 
-### To setup your own local search you can now use this repo.
+### Easily and scalably search and analyze your documents, entirely locally.
 
 <p>
 <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/GovML/retriever" />
