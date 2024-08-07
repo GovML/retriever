@@ -2,7 +2,7 @@
 
 # Retriever
 
-### To setup your own local search you can now use this repo.
+### Easily and scalably search and analyze your documents, entirely locally.
 
 <p>
 <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/GovML/retriever" />
@@ -12,9 +12,8 @@
 <img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/GovML/retriever" />
 <img alt="Github License" src="https://img.shields.io/badge/License-Apache-yellow.svg" />
 </p>
-
+<img src="./retriever.gif"/>
 </div>
-
 -----
 ## Install 
 
@@ -65,8 +64,7 @@ This URL would work for your local setup only
 ## Tickets
 
 1.0.0
-- [x] Add lightweight embedding model support as flag in launcher
-- [x] Remove HTML requirement for plotly visualization
+- [ ] Quickstart Dataset
 - [ ] Make LDA visualization update
-- [ ] Add model quantized
+- [ ] QA Model Improvements
 
