@@ -2,7 +2,7 @@
 
 # Retriever
 
-### Easily and scalably search and analyze your documents, entirely locally.
+### Visually search and analyze your documents, entirely locally.
 
 <p>
 <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/GovML/retriever" />
@@ -14,24 +14,29 @@
 </p>
 <img src="./retriever.gif"/>
 </div>
------
-## Install 
 
-Recommended to use a virtual environment using venv - 
+## Install 
+Options:
+1) Install with pip (Stable Release)
+```bash
+$ pip install retriever-search
+```
+2) Install from Github Repo (Latest Release)
+```bash
+$ git clone https://github.com/GovML/retriever.git
+$ pip install -e .
+```
+We recommended using a virtual environment for all dependency installations. Before installing our repo, you can use venv to isolate the various packages installed in this environment to prevent conflicts with versions already installed on your computer.
 
 ```bash
 $ python -m venv new_env
 $ source new_env/bin/activate
 ```
-For installing from the github repo - 
-```bash
-$ pip install -e .
-```
-For installing from the pip - 
-```bash
-$ pip install retriever-search
-```
 
+# Quickstart - Launching Retriever
+fsdfsdf
+
+# In-Depth Usage Guide
 ## Search server
 
 ```bash
