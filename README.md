@@ -64,11 +64,12 @@ Next time you run Retriever, you can call it directly on the json you just saved
 >>> search_server.run_search_server('input_directory', 'input_json', 'json_save_path', 'embedding_model', 'qa_model', device='cpu')
 ```
 #### Search parameter definitions
-- input_directory -- The directory holding your files
-- input_json -- pre saved json file from earlier runs can be used for faster loading
-- json_save_path -- pass for saving the embeddings to a json can be used later as input_json
-- embedding_model -- pick the embedding model you want to we use Spectre model as a default
-- qa_model -- you can currently pick between tiny, medium and large
+- input_directory -- The directory holding your files, optional if input_json is passed instead
+- input_json -- pre saved json file from earlier runs can be used for faster loading, optional if input_directory is passed instead
+- json_save_path -- (optional) pass for saving the embeddings to a json can be used later as input_json
+- embedding_model -- (optional) pick the embedding model you want to we use Spectre model as a default
+- qa_model -- (optional) you can currently pick between tiny, medium and large
+- device -- (optional) can be set to cpu, mps or cuda
 
 ## Tickets
 
