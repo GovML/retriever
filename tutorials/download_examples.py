@@ -1,3 +1,5 @@
+# call this python file by running python download_papers.py --download_path /path/to/your/folder
+
 import arxiv
 import time
 import argparse
