@@ -8,13 +8,15 @@ from haystack.components.embedders import SentenceTransformersDocumentEmbedder
 from sentence_transformers import SentenceTransformer
 import numpy as np
 import umap.umap_ as umap
+from bertopic import BERTopic
 
 class DocumentIngestion:
-    def __init__(self, path, model, device = 'cpu', max_docs = float("inf")):
+    def __init__(self, path, model, device = 'cpu', max_docs = float("inf"), n_topics = 10):
         self.path = path
         self.documents = []
         self.max_docs = max_docs
         self.device = device
+        self.n_topics = n_topics
         print(path, device)
 
         if path.endswith('.pdf'):
@@ -41,6 +43,9 @@ class DocumentIngestion:
             self.create_2d_embeddings()
         else:
             print('2d Embeddings loaded from json.')
+        
+        # Perform topic modeling with BERTopic
+        self.create_topics()
 
     def convert_pdf_str(self, pdf_path:str) -> str:
         #performant conversion of pdf path to string
@@ -164,3 +169,23 @@ class DocumentIngestion:
 
         del dic
         print(f'Json saved to {output_path}. Initiate search with the json to not repeat ingestion.')
+    
+    def create_topics(self):
+        # Convert the list of document embeddings into a numpy array
+        embeddings_np = np.array([doc.embedding for doc in self.documents])
+        print('Fitting BERTopic Model...')
+
+        # Initialize the BERTopic model
+        model = BERTopic()
+        # model = BERTopic(n_gram_range=(1, 3), min_topic_size=10, top_n_words=10)
+
+        # Fit the model on document contents with the precomputed embeddings
+        topics, probs = model.fit_transform([doc.content for doc in self.documents], embeddings_np)
+
+        # Store the generated topics and their probabilities into each document's metadata
+        for i, doc in enumerate(self.documents):
+            doc.meta['topic'] = topics[i]  # Assign the identified topic to the document
+            doc.meta['topic_probability'] = probs[i]  # Assign the probability of the document belonging to the topic
+
+        # Store the fitted BERTopic model in the instance for potential future use
+        self.topic_model = model
