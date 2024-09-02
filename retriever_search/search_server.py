@@ -51,17 +51,17 @@ class SearchServer:
             print('Initializing Document Ingestion...')
         #inputs should be clear by this point
 
-        ingestion = DocumentIngestion(self.input_file, model = self.embedding_model, device=self.device)
+        self.ingestion = DocumentIngestion(self.input_file, model = self.embedding_model, device=self.device)
 
         if json_save_path is not None:
-            ingestion.to_json(json_save_path)
+            self.ingestion.to_json(json_save_path)
         
         self.document_store = document_store = QdrantDocumentStore(
             ":memory:",
             embedding_dim=768,  # the embedding_dim should match that of the embedding model
         )
 
-        self.document_store.write_documents(ingestion.documents)
+        self.document_store.write_documents(self.ingestion.documents)
 
         if verbose:
             print('Initializing Search Functions...')
@@ -107,6 +107,34 @@ class SearchServer:
         @self.app.route('/get_all_results_cache', methods=['GET'])
         def get_all_results_cache():
             return jsonify(self.search_result_cache)
+
+        @self.app.route('/get_topics', methods=['GET'])  
+        def get_topics():
+            try:
+                topics = {}
+                documents = self.ingestion.documents
+
+                if not documents:
+                    print("No documents found in ingestion.")
+                    return jsonify(topics)  # Return an empty response if no documents are found
+
+                for doc in documents:
+                    topic = doc.meta.get('topic')
+
+                    if topic is None:
+                        print(f"No topic assigned to document ID: {doc.id}")
+                        continue
+
+                    if topic not in topics:
+                        topics[topic] = []
+                    topics[topic].append(doc.id)
+
+                return jsonify(topics)
+
+            except Exception as e:
+                print(f"Error in /get_topics: {e}")
+                return jsonify({"error": str(e)}), 500
+
 
 def run_search_server(input_directory = None, input_json = None, json_save_path = None, embedding_model = 'sentence-transformers/allenai-specter', qa_model = 'tiny', device = 'cpu', host = '127.0.0.1', verbose = True):
     

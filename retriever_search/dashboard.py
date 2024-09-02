@@ -72,11 +72,24 @@ class Dashboard():
             dcc.Graph(id='heatmap', style= {'margin-left' : '0%',"width": "85%",'padding': '0px 0px', 'box-shadow': '2px 2px 2px lightgrey'}),
             html.H2("Country Mentions", style = self.header_style),
             dcc.Graph(id='location-map', style= {'margin-left' : '0%',"width": "85%",'padding': '0px 0px', 'box-shadow': '2px 2px 2px lightgrey'}),
-            html.H2("Word Cloud", style = self.header_style),
-            html.Div([
-            html.Img(id='wordcloud', disable_n_clicks = True, alt = "WordCloud", style = {'margin-top':'0px','height': '22.5%', 'width':'50%', 'box-shadow': '2px 2px 2px lightgrey', 'position': 'absolute'})], 
-                style={'margin-left': '15%', 'margin-top': '0px', 'height': '40%', 'width': '`16%'}),
+            # html.H2("Word Cloud", style = self.header_style),
+            # html.Div([
+            # html.Img(id='wordcloud', disable_n_clicks = True, alt = "WordCloud", style = {'margin-top':'0px','height': '22.5%', 'width':'50%', 'box-shadow': '2px 2px 2px lightgrey', 'position': 'absolute'})], 
+            #     style={'margin-left': '15%', 'margin-top': '0px', 'height': '40%', 'width': '`16%'}),
             
+            html.H2("Word Cloud", style=self.header_style),
+            html.Div([
+                html.Img(id='wordcloud', disable_n_clicks=True, alt="WordCloud", style={
+                    'margin-top': '0px',
+                    'height': '300px',
+                    'width': '50%',
+                    'box-shadow': '2px 2px 2px lightgrey',
+                    'position': 'relative'
+                }),
+            ], style={'margin-left': '15%', 'margin-top': '0px', 'height': 'auto', 'width': '`16%'}),
+            
+            html.H2("Topic Modeling", style=self.header_style),
+            dcc.Graph(id='topics', style={'margin-left': '0%', "width": "85%", 'padding': '0px 0px', 'box-shadow': '2px 2px 2px lightgrey'}),
         ])
 
 
@@ -85,6 +98,7 @@ class Dashboard():
             Output('heatmap', 'figure',  allow_duplicate=True),
             Output('location-map', 'figure',  allow_duplicate=True),
             Output('wordcloud','src',  allow_duplicate=True),
+            Output('topics', 'figure', allow_duplicate=True),
             
             Input('query-selector', 'value'),
             prevent_initial_call=True
@@ -275,6 +289,55 @@ class Dashboard():
 
         fig.update_layout(margin=dict(l= 10, r = 10, t=5, b=5))
         return fig
+    
+    # Create topic modeling graph
+    def update_topics_graph(self, selected_queries):
+        # Fetch topics data from the server
+        try:
+            response = requests.get("http://127.0.0.1:5000/get_topics")
+            response.raise_for_status()
+            topics_data = response.json()  # Get topics data from the endpoint
+        except requests.exceptions.RequestException as e:
+            print(f"Failed to fetch topics: {e}")
+            return {}
+        
+        # Initialize an empty dictionary to count the number of documents per topic
+        topic_counts = {}
+
+        # Loop through each selected query to aggregate topic data
+        for query in selected_queries:
+            if query in self.documents:
+                for doc in self.documents[query]:
+                    doc_id = doc["id"]
+
+                    # Check if this document ID is associated with any topics
+                    for topic, doc_ids in topics_data.items():
+                        if doc_id in doc_ids:  # If the document ID is in the list for a topic
+                            if topic not in topic_counts:
+                                topic_counts[topic] = 0
+                            topic_counts[topic] += 1
+
+        # Convert the topic_counts dictionary into a DataFrame
+        data = [{'Topic': str(topic), 'Documents': count} for topic, count in topic_counts.items()]
+        df = pd.DataFrame(data)
+
+        # Check if DataFrame is empty
+        if df.empty:
+            return {}  # Return an empty plot if no data
+
+        # Create the bar chart using Plotly Express
+        fig = px.bar(df, x='Topic', y='Documents', title='Documents per Topic')
+
+        # Customize the layout for better visualization
+        fig.update_layout(
+            autosize=True,
+            margin=dict(l=10, r=10, t=30, b=10),
+            plot_bgcolor="rgba(242,242,242, 0.5)",
+            transition={'duration': 500, 'easing': 'cubic-in-out'}
+        )
+
+        return fig
+
     ##### Visualization Code End
 
     def update_graphs(self, selected_queries):
@@ -287,20 +350,22 @@ class Dashboard():
                 heatmap_fig = self.update_heatmap_graph(selected_queries)
                 location_map_fig = self.update_location_map(selected_queries)
                 wordcloud_src = self.update_wordcloud_graph(selected_queries)
+                topics_fig = self.update_topics_graph(selected_queries)
 
-                return umap_fig, heatmap_fig, location_map_fig, wordcloud_src
+                return umap_fig, heatmap_fig, location_map_fig, wordcloud_src, topics_fig
             
             else:
                 heatmap_fig = self.update_heatmap_graph(selected_queries)
                 location_map_fig = self.update_location_map(selected_queries)
                 wordcloud_src = self.update_wordcloud_graph(selected_queries)
+                topics_fig = self.update_topics_graph(selected_queries)
 
-                return heatmap_fig, location_map_fig, wordcloud_src
+                return heatmap_fig, location_map_fig, wordcloud_src, topics_fig
 
 
         
         else:
-            return {}, {}, {}, ''
+            return {}, {}, {}, '', {}
             
 
 

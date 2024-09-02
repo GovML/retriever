@@ -31,7 +31,8 @@ setup(
         'pyLDAvis==3.4.1',
         'nltk==3.7',
         'geopy',
-        'pycountry'
+        'pycountry',
+        'bertopic'
     ],
     packages=find_packages(),
     include_package_data=True,
