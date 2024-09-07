@@ -113,6 +113,7 @@ class SearchServer:
             try:
                 topics = {}
                 documents = self.ingestion.documents
+                top_words_per_topic = self.ingestion.top_words_per_topic
 
                 if not documents:
                     print("No documents found in ingestion.")
@@ -129,7 +130,7 @@ class SearchServer:
                         topics[topic] = []
                     topics[topic].append(doc.id)
 
-                return jsonify(topics)
+                return jsonify({"topics": topics, "top_words_per_topic": top_words_per_topic})
 
             except Exception as e:
                 print(f"Error in /get_topics: {e}")
