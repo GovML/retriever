@@ -16,6 +16,14 @@
 </div>
 
 ## Install 
+We recommended using a virtual environment for all dependency installations. Before installing our repo, you can use venv to isolate the various packages installed in this environment to prevent conflicts with versions already installed on your computer.
+
+```
+$ python -m venv new_env
+$ source new_env/bin/activate
+```
+
+
 Options:
 1) Install with pip (Stable Release)
 ```
@@ -25,12 +33,6 @@ $ pip install retriever-search
 ```
 $ git clone https://github.com/GovML/retriever.git
 $ pip install -e .
-```
-We recommended using a virtual environment for all dependency installations. Before installing our repo, you can use venv to isolate the various packages installed in this environment to prevent conflicts with versions already installed on your computer.
-
-```
-$ python -m venv new_env
-$ source new_env/bin/activate
 ```
 
 ## Quickstart - Launching Retriever
