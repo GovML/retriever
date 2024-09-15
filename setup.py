@@ -32,7 +32,7 @@ setup(
         'nltk==3.7',
         'geopy',
         'pycountry',
-        'bertopic'
+        'bertopic==0.16.3'
     ],
     packages=find_packages(),
     include_package_data=True,
