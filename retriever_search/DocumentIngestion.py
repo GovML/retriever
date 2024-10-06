@@ -3,6 +3,7 @@ import json
 from tqdm import tqdm
 # requires pymupdf==1.22.5
 import fitz
+import pandas as pd
 from haystack import Document
 from haystack.components.embedders import SentenceTransformersDocumentEmbedder
 from sentence_transformers import SentenceTransformer
@@ -24,7 +25,24 @@ class DocumentIngestion:
             # Handle JSON file
             self.load_json(path)
         elif os.path.isdir(path):
-            self.ingest_pdf_folder(path)
+            pdf = True
+            for fname in os.listdir(path):
+                if not fname.endswith('.pdf'):
+                    pdf = False
+                    break
+            if pdf:
+                self.ingest_pdf_folder(path)
+
+            if not pdf:
+                csv = True
+                for fname in os.listdir(path):
+                    if not fname.endswith('.csv'):
+                        csv = False
+                        break
+                if csv:
+                    print('csv files exist')
+                    self.ingest_csv_folder(path)
+
         else:
             assert False, 'Unsupported file type(s) for ingestion. Please provide a folder or json.'
 
@@ -38,6 +56,7 @@ class DocumentIngestion:
         #compute 2d embeddings
         if self.documents[0].meta['embedding_2d'] is None:
             print('Computing 2d Embeddings...')
+
             self.create_2d_embeddings()
         else:
             print('2d Embeddings loaded from json.')
@@ -45,7 +64,6 @@ class DocumentIngestion:
     def convert_pdf_str(self, pdf_path:str) -> str:
         #performant conversion of pdf path to string
         pdf_text = ''
-
         with fitz.open(pdf_path) as doc:
             for page in doc:
                 text = page.get_text()
@@ -64,13 +82,44 @@ class DocumentIngestion:
                 print('Hit max documents allowed by your instantiation of max_docs. No more documents to be added.')
                 return
             else:
+                # first 4000 tokens (chunking)
                 self.documents.append(Document(id = file_name, 
                                             content= content[0:4000],
                                             embedding = None,
                                             meta = {'embedding_2d': None, 'title': None}
                                             ))
+                print('documents appended')
         except:
             file_name = os.path.basename(pdf_path)
+            print(file_name)
+
+    def convert_csv_str(self, csv_path: str) -> str:
+        # performant conversion of pdf path to string
+        csv_text = ''
+        df = pd.read_csv(csv_path)
+        text_series_list = [df[col].astype(str) for col in df.columns]
+        text_strings = [' '.join(text_series) for text_series in text_series_list]
+        for text_string in text_strings:
+            csv_text += text_string
+        return csv_text
+
+    def ingest_csv(self, csv_path):
+        try:
+            file_name = os.path.basename(csv_path)
+            content = self.convert_csv_str(csv_path)
+            print('content: ', content)
+            if len(self.documents) >= self.max_docs:
+                print('Hit max documents allowed by your instantiation of max_docs. No more documents to be added.')
+                return
+            else:
+                self.documents.append(Document(id = file_name,
+                                            content= content[0:4000],
+                                            embedding = None,
+                                            meta = {'embedding_2d': None, 'title': None}
+                                            ))
+                print('documents appended')
+        except:
+            file_name = os.path.basename(csv_path)
             print(file_name)
         
 
@@ -113,16 +162,25 @@ class DocumentIngestion:
                 pdf_path = os.path.join(self.path, file_name)
                 self.ingest_pdf(pdf_path)
 
+    def ingest_csv_folder(self, path):
+        for file_name in tqdm(os.listdir(self.path)):
+            if file_name.endswith('.csv'):
+                csv_path = os.path.join(self.path, file_name)
+                print('ingesting csv files')
+                self.ingest_csv(csv_path)
+
     def create_embeddings(self, model):
         model = SentenceTransformer(model, device = self.device)
-   
+
         content = []
+        print("document1 ", self.documents)
         for doc in tqdm(self.documents):
             content.append(doc.content)
         embeddings = model.encode(content, batch_size = 128, show_progress_bar = True)
+        print("embeddings ", embeddings)
         for i, doc in enumerate(tqdm(self.documents)):
             doc.embedding = embeddings[i].tolist()
-
+        print("document2 ", self.documents)
         #clean up when done
         del embeddings
 
@@ -133,11 +191,14 @@ class DocumentIngestion:
             # Sample 20,000 data points
             sampled_indices = np.random.choice(embeddings_np.shape[0], 30000, replace=False)
             sampled_data = embeddings_np[sampled_indices]
+            print("sampled_data after ", sampled_data)
         else:
             sampled_data = embeddings_np
         # Train UMAP against the sampled data
         umap_model = umap.UMAP()
         print('Training 2d Representations...')
+
+        print("sampled_data ", sampled_data)
         umap_model.fit(sampled_data)
 
         print('Fitting 2d Representations...')
