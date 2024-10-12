@@ -32,7 +32,8 @@ setup(
         'nltk==3.7',
         'geopy',
         'pycountry',
-        'bertopic==0.16.3'
+        'bertopic',
+        'scikit-learn==1.5.1'
     ],
     packages=find_packages(),
     include_package_data=True,

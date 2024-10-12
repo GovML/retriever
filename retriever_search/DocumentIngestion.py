@@ -9,6 +9,7 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 import umap.umap_ as umap
 from bertopic import BERTopic
+from sklearn.feature_extraction.text import CountVectorizer
 
 class DocumentIngestion:
     def __init__(self, path, model, device = 'cpu', max_docs = float("inf"), n_topics = 10):
@@ -175,17 +176,30 @@ class DocumentIngestion:
         embeddings_np = np.array([doc.embedding for doc in self.documents])
         print('Fitting BERTopic Model...')
 
+        # Custom CountVectorizer to remove stop words
+        vectorizer_model = CountVectorizer(ngram_range=(1, 3), stop_words='english')
+
         # Initialize the BERTopic model
-        model = BERTopic()
+        model = BERTopic(vectorizer_model=vectorizer_model)
         # model = BERTopic(n_gram_range=(1, 3), min_topic_size=10, top_n_words=10)
 
         # Fit the model on document contents with the precomputed embeddings
         topics, probs = model.fit_transform([doc.content for doc in self.documents], embeddings_np)
+
+        # Extract top 5 words per topic
+        topic_info = model.get_topic_info()
+        top_words_per_topic = {}
+
+        for topic_id in topic_info['Topic']:
+            if topic_id != -1:  # Ignore outliers
+                words = model.get_topic(topic_id)
+                top_words_per_topic[topic_id] = [word for word, _ in words[:5]]
 
         # Store the generated topics and their probabilities into each document's metadata
         for i, doc in enumerate(self.documents):
             doc.meta['topic'] = topics[i]  # Assign the identified topic to the document
             doc.meta['topic_probability'] = probs[i]  # Assign the probability of the document belonging to the topic
 
-        # Store the fitted BERTopic model in the instance for potential future use
+        # Store the fitted BERTopic model & top words in the instance for potential future use
         self.topic_model = model
+        self.top_words_per_topic = top_words_per_topic

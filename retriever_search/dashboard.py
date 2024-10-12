@@ -296,7 +296,10 @@ class Dashboard():
         try:
             response = requests.get("http://127.0.0.1:5000/get_topics")
             response.raise_for_status()
-            topics_data = response.json()  # Get topics data from the endpoint
+
+            data = response.json()
+            topics_data = data["topics"]
+            top_words_per_topic = data["top_words_per_topic"]
         except requests.exceptions.RequestException as e:
             print(f"Failed to fetch topics: {e}")
             return {}
@@ -317,8 +320,16 @@ class Dashboard():
                                 topic_counts[topic] = 0
                             topic_counts[topic] += 1
 
-        # Convert the topic_counts dictionary into a DataFrame
-        data = [{'Topic': str(topic), 'Documents': count} for topic, count in topic_counts.items()]
+        # Prepare data for the bar chart
+        data = []
+        for topic, count in topic_counts.items():
+            top_words = ", ".join(top_words_per_topic.get(str(topic), []))  # Get top 5 words for the topic
+            data.append({
+                'Topic': str(topic),
+                'Documents': count,
+                'TopWords': top_words  # Add top words to the data for hover
+            })
+
         df = pd.DataFrame(data)
 
         # Check if DataFrame is empty
@@ -327,6 +338,12 @@ class Dashboard():
 
         # Create the bar chart using Plotly Express
         fig = px.bar(df, x='Topic', y='Documents', title='Documents per Topic')
+
+        # Add TopWords to customdata for hovertemplate
+        fig.update_traces(
+            customdata=df[['TopWords']].values,  # Ensure customdata includes the top words
+            hovertemplate="<b>Topic %{x}</b><br>Documents: %{y}<br>Top Words: %{customdata[0]}"  # Customize hovertemplate
+        )
 
         # Customize the layout for better visualization
         fig.update_layout(
