@@ -33,7 +33,8 @@ setup(
         'geopy',
         'pycountry',
         'bertopic',
-        'scikit-learn==1.5.1'
+        'scikit-learn==1.5.1',
+        'pydantic==2.7.1'
     ],
     packages=find_packages(),
     include_package_data=True,
