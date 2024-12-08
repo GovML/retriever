@@ -12,13 +12,25 @@ from bertopic import BERTopic
 from sklearn.feature_extraction.text import CountVectorizer
 
 class DocumentIngestion:
-    def __init__(self, path, model, device = 'cpu', max_docs = float("inf"), n_topics = 10):
+    def __init__(self, path, model, ingestion_type= 'document', device = 'cpu', max_docs = float("inf"), n_topics = 10):
+        """
+        Args:
+            path (str): Path to the file or folder to ingest.
+            model (str): Model to compute embeddings.
+            device (str): Device for computation ('cpu' or 'cuda').
+            max_docs (int): Maximum number of documents to ingest.
+            n_topics (int): Number of topics for topic modeling.
+            ingestion_type (str): "document" for full-document ingestion, "page" for page-wise ingestion.
+        """
+        assert ingestion_type in {"document", "page"}, 'ingestion_type must be either "document" or "page".'
+
         self.path = path
         self.documents = []
         self.max_docs = max_docs
         self.device = device
         self.n_topics = n_topics
-        print(path, device)
+        self.ingestion_type = ingestion_type
+        print(path, device, ingestion_type)
 
         if path.endswith('.pdf'):
             # Handle single PDF file
@@ -60,53 +72,57 @@ class DocumentIngestion:
         return pdf_text
 
     def ingest_pdf(self, pdf_path):
-        # Convert single PDF to dictionary and add it to self.documents
         try:
             file_name = os.path.basename(pdf_path)
-            #if len(self.documents) > 280:
-            #    print(file_name)
-            content = self.convert_pdf_str(pdf_path)
-            if len(self.documents) >= self.max_docs:
-                print('Hit max documents allowed by your instantiation of max_docs. No more documents to be added.')
-                return
-            else:
-                self.documents.append(Document(id = file_name, 
-                                            content= content[0:4000],
-                                            embedding = None,
-                                            meta = {'embedding_2d': None, 'title': None}
-                                            ))
-        except:
-            file_name = os.path.basename(pdf_path)
-            print(file_name)
+            with fitz.open(pdf_path) as doc:
+                current_content = ""
+                start_page = 1  # Tracks the starting page of a merged document
+
+                for page_num, page in enumerate(doc):
+                    page_content = page.get_text().strip()
+
+                    if not current_content:
+                        start_page = page_num + 1  # Initialize start_page
+
+                    # Add current page content to current_content
+                    current_content += page_content
+
+                    # Check if we need to merge the next page or create a new document
+                    if len(current_content) >= 1000 or page_num == len(doc) - 1:  # Either content is sufficient or last page
+                        # Create a document with the accumulated content
+                        if len(self.documents) >= self.max_docs:
+                            print('Hit max documents allowed by your instantiation of max_docs. No more documents to be added.')
+                            return
+
+                        # Define page range in the ID
+                        end_page = page_num + 1
+                        page_range = f"{start_page}" if start_page == end_page else f"{start_page}-{end_page}"
+                        self.documents.append(Document(
+                            id=f"{file_name}_page_{page_range}",
+                            content=current_content,
+                            embedding=None,
+                            meta={'embedding_2d': None, 'title': file_name}
+                        ))
+
+                        # Reset current_content for the next document
+                        current_content = ""
+        except Exception as e:
+            print(f"Failed to process PDF {pdf_path}: {e}")
+
         
 
     def load_json(self, json_path):
-        # Load JSON file and extract documents\
         print(f'Loading from JSON: {json_path}')
-
         with open(json_path, 'r') as json_file:
             data = json.load(json_file)
 
             for item in tqdm(data):
-                if 'embedding' in item.keys():
-                    emb = item["embedding"]
-                else:
-                    emb = None
-                if 'embedding_2d' in item.keys():
-                    emb_2d = item["embedding_2d"]
-                else:
-                    emb_2d  = None
-
-                if 'title' in item.keys():
-                    title= item["title"]
-                else:
-                    title= None
-
-                self.documents.append(Document(id = item["id"], 
-                                               content= item["content"][0:4000],
-                                               embedding = emb,
-                                               meta = {'embedding_2d': emb_2d, 'title': title}
-                                               ))
+                self.documents.append(Document(
+                    id=item["id"],
+                    content=item["content"][0:4000],
+                    embedding=item.get("embedding"),
+                    meta={'embedding_2d': item.get("embedding_2d"), 'title': item.get("title")}
+                ))
                 if len(self.documents) >= self.max_docs:
                     print('Hit max documents allowed by your instantiation of max_docs. No more documents to be added.')
                     return
