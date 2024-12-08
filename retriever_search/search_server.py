@@ -11,7 +11,7 @@ from retriever_search.QueryPipeline import QueryPipeline
 
 class SearchServer:
 
-    def __init__(self, input_directory = None, input_json = None, json_save_path = None, embedding_model = 'sentence-transformers/allenai-specter', qa_model = 'tiny', device = 'cpu', host = '127.0.0.1', verbose = True):
+    def __init__(self, input_directory = None, input_json = None, json_save_path = None, ingestion_type = 'document', embedding_model = 'sentence-transformers/allenai-specter', qa_model = 'tiny', device = 'cpu', host = '127.0.0.1', verbose = True):
         if verbose:
             print('Initializing Application...')
 
@@ -26,6 +26,7 @@ class SearchServer:
         '''
         self.device = device
         self.host = host
+        self.ingestion_type = ingestion_type
 
         self.query_result_cache = {}
         self.search_result_cache = {}
@@ -51,7 +52,7 @@ class SearchServer:
             print('Initializing Document Ingestion...')
         #inputs should be clear by this point
 
-        self.ingestion = DocumentIngestion(self.input_file, model = self.embedding_model, device=self.device)
+        self.ingestion = DocumentIngestion(self.input_file, model = self.embedding_model, device=self.device, ingestion_type=self.ingestion_type)
 
         if json_save_path is not None:
             self.ingestion.to_json(json_save_path)
@@ -137,6 +138,6 @@ class SearchServer:
                 return jsonify({"error": str(e)}), 500
 
 
-def run_search_server(input_directory = None, input_json = None, json_save_path = None, embedding_model = 'sentence-transformers/allenai-specter', qa_model = 'tiny', device = 'cpu', host = '127.0.0.1', verbose = True):
+def run_search_server(input_directory = None, input_json = None, json_save_path = None, ingestion_type = 'document', embedding_model = 'sentence-transformers/allenai-specter', qa_model = 'tiny', device = 'cpu', host = '127.0.0.1', verbose = True):
     
-    SearchServer(input_directory,input_json,json_save_path,embedding_model,qa_model,device,host,verbose) #, json_save_path = '../testing_new_server.json',device = 'mps'
+    SearchServer(input_directory,input_json,json_save_path,ingestion_type,embedding_model,qa_model,device,host,verbose) #, json_save_path = '../testing_new_server.json',device = 'mps'
