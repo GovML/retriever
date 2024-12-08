@@ -22,7 +22,7 @@ setup(
         'qdrant-haystack==3.0.0',
         'Flask',
         'pandas==2.2.1',
-        'torch==2.2.1',
+        # 'torch==2.2.1',
         'accelerate==0.27.2',
         'gradio==4.37.2',
         'dash==2.15.0',
