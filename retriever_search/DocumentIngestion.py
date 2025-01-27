@@ -11,6 +11,8 @@ import umap.umap_ as umap
 from bertopic import BERTopic
 from sklearn.feature_extraction.text import CountVectorizer
 
+#test extra
+
 class DocumentIngestion:
     def __init__(self, path, model, device = 'cpu', max_docs = float("inf"), n_topics = 10):
         self.path = path
