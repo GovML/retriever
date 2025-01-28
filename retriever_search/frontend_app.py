@@ -20,10 +20,17 @@ class GradioSearchUI:
             synthesized_qa = f"### Synthesized Answer: {qa_answer}" if score > 0.5 else f"### We could not find an answer contained within your documents: Confidence {round(score, 2)} - {qa_answer}"
             data = []
             for doc in documents:
+                pdf_name = doc["id"].split("_page_")[0]  # Get the part before "_page_"
+
+                # Extract the page range from the document ID
+                page_range = doc["id"].split("_page_")[1] if "_page_" in doc["id"] else "All"
+
+                # Append formatted data to the list
                 data.append({
-                    "Document Name": doc["id"],
-                    "Content": doc["content"],
+                    "Document Name": pdf_name,
+                    "Content": f"P{page_range}: {doc['content']}",
                 })
+
             self.current_results = pd.DataFrame(data)
             
             if [query] not in self.previous_queries:
